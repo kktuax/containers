@@ -89,6 +89,7 @@ tomcat_validate() {
 tomcat_ensure_user_exists() {
     local username="${1:?username is missing}"
     local password="${2:-}"
+    local roles="${3:-}"
 
     # This command will create a new user in tomcat-users.xml (inside <tomcat-users>) - How it works:
     # 0. Assign the XML namespace 'x' (required because it uses a non-standard namespace)
@@ -103,7 +104,7 @@ tomcat_ensure_user_exists() {
         --var new_node '$prev' \
         --insert '$new_node' --type attr --name 'username' --value "$username" \
         --insert '$new_node' --type attr --name 'password' --value "$password" \
-        --insert '$new_node' --type attr --name 'roles' --value "manager-gui,admin-gui" \
+        --insert '$new_node' --type attr --name 'roles' --value "$roles" \
         "$TOMCAT_USERS_CONF_FILE"
 }
 
@@ -162,7 +163,7 @@ EOF
 
     if is_boolean_yes "$TOMCAT_ENABLE_AUTH"; then
         info "Creating Tomcat user"
-        tomcat_ensure_user_exists "$TOMCAT_USERNAME" "$TOMCAT_PASSWORD"
+        tomcat_ensure_user_exists "$TOMCAT_USERNAME" "$TOMCAT_PASSWORD" "$TOMCAT_ROLES"
     fi
 
     # Fix to make upgrades from old images work
