@@ -20,7 +20,7 @@ ENV HOME="/" \
 COPY prebuildfs /
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Install required system packages and dependencies
-RUN install_packages ca-certificates curl libssl1.1 procps xmlstarlet zlib1g fontconfig
+RUN install_packages ca-certificates curl libssl1.1 procps xmlstarlet zlib1g fontconfig libfreetype6
 RUN mkdir -p /tmp/bitnami/pkg/cache/ && cd /tmp/bitnami/pkg/cache/ && \
     COMPONENTS=( \
       "java-11.0.18-10-4-linux-${OS_ARCH}-debian-11" \
